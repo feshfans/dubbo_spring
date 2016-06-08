@@ -1,0 +1,187 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>dubbo-demo</artifactId>
+        <groupId>com.kang</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>dubbo-service-impl</artifactId>
+    <packaging>war</packaging>
+    <name>dubbo-service-impl Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+
+    <!-- **************************** Properties 配置 **************************** -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>3.8.1</junit.version>
+        <springframework.version>4.1.6.RELEASE</springframework.version>
+        <commonsLogging.version>1.2</commonsLogging.version>
+    </properties>
+    <!-- **************************** /Properties 配置 **************************** -->
+
+    <dependencies>
+        <!-- **************************** Spring 依赖 **************************** -->
+        <!-- 添加Spring-core包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <!-- 添加spring-tx包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <!-- Spring ORM 相关-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <!-- 添加spring-jdbc包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <!--添加spring-web包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <!-- 添加spring-context包 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>${commonsLogging.version}</version>
+        </dependency>
+        <!--添加aspectjweaver包 -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+        <!-- **************************** /Spring 依赖 **************************** -->
+
+        <!-- **************************** Dubbo 依赖 **************************** -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.5.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.3.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.jmx</groupId>
+                    <artifactId>jmxri</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.jdmk</groupId>
+                    <artifactId>jmxtools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.jms</groupId>
+                    <artifactId>jms</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <!-- **************************** /Dubbo 依赖 **************************** -->
+
+        <!-- **************************** interface 依赖 **************************** -->
+        <dependency>
+            <groupId>com.kang</groupId>
+            <artifactId>dubbo-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- **************************** /interface 依赖 **************************** -->
+    </dependencies>
+
+    <build>
+        <finalName>dubbo-service-impl</finalName>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>*.*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <!-- 这是zookeeper的地址，要根据实际情况进行配置，默认zookeeper://127.0.0.1:2181 -->
+                <dubbo.address>zookeeper://127.0.0.1:2181</dubbo.address>
+                <!-- dubbo暴露的端口配置 -->
+                <dubbo.port>29014</dubbo.port>
+                <!-- 工程的服务集合，${user.name}表示当前PC的UserName -->
+                <dubbo.group>${user.name}</dubbo.group>
+                <!-- dubbo服务版本号 -->
+                <dubbo.version>1.0.0</dubbo.version>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <dubbo.address>zookeeper://127.0.0.1:2181</dubbo.address>
+                <dubbo.port>29014</dubbo.port>
+                <dubbo.group>${user.name}</dubbo.group>
+                <dubbo.version>1.0.0</dubbo.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <dubbo.address>zookeeper://127.0.0.1:2181</dubbo.address>
+                <dubbo.port>29014</dubbo.port>
+                <dubbo.group>${user.name}</dubbo.group>
+                <dubbo.version>1.0.0</dubbo.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>product</id>
+            <properties>
+                <dubbo.address>zookeeper://127.0.0.1:2181</dubbo.address>
+                <dubbo.port>29014</dubbo.port>
+                <dubbo.group>${user.name}</dubbo.group>
+                <dubbo.version>1.0.0</dubbo.version>
+            </properties>
+        </profile>
+    </profiles>
+</project>
